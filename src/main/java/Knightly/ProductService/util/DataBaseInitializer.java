@@ -6,9 +6,11 @@ import Knightly.ProductService.repository.ComponentRepository;
 import Knightly.ProductService.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+@Configuration
 public class DataBaseInitializer {
 
     private final String WAREHOUSE_PRODUCTS_URL = "http://localhost:6868/products";
