@@ -50,8 +50,8 @@ public class DataService {
     }
 
     public void  updateShoppingCart(long userID, List<Product> newShoppingCart) {
-        User emptyCartUser = userRepository.findById(userID);
-        emptyCartUser.setProducts(newShoppingCart);
-        this.userRepository.save(emptyCartUser);
+        User updatedCartUser = userRepository.findById(userID);
+        updatedCartUser.setProducts(newShoppingCart);
+        this.userRepository.save(updatedCartUser);
     }
 }
