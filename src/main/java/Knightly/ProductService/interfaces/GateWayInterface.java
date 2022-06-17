@@ -7,7 +7,9 @@ public interface GateWayInterface {
 
     void getProducts();
 
-    void getProduct();
+    void getProduct(long productID);
 
     void getUser(long userID);
+
+    void emptyShoppingCart(long userID);
 }
