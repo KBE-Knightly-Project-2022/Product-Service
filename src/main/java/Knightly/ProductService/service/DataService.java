@@ -28,19 +28,23 @@ public class DataService {
     @Autowired
     private UserRepository userRepository;
 
-    @Cacheable(value = "Component")
+    @Cacheable("components")
     public List<Component> getComponents() {
         return this.componentRepository.findAll();
     }
 
-    @Cacheable(value = "Product")
+    @Cacheable("products")
     public List<Product> getProducts() {
         return this.productRepository.findAll();
     }
 
-    @Cacheable(value = "User", key = "#id")
+    @Cacheable(value = "User", key = "#userID")
     public User getUser(long userID) {
         return this.userRepository.findById(userID);
+    }
+
+    public void createProduct(Product product) {
+        this.productRepository.save(product);
     }
 
     public void emptyShoppingCart(long userID) {
