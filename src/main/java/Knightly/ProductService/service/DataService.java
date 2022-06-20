@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,9 +39,13 @@ public class DataService {
         return this.productRepository.findAll();
     }
 
-    @Cacheable(value = "User", key = "#id")
+    @Cacheable(value = "User", key = "#userID")
     public User getUser(long userID) {
         return this.userRepository.findById(userID);
+    }
+
+    public void createProduct(Product product) {
+        this.productRepository.save(product);
     }
 
     public void emptyShoppingCart(long userID) {
