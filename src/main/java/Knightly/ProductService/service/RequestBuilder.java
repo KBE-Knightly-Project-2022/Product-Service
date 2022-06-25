@@ -6,8 +6,8 @@ import Knightly.ProductService.model.User;
 import Knightly.ProductService.payLoadModel.ComponentPayload;
 import Knightly.ProductService.payLoadModel.ProductPayload;
 import Knightly.ProductService.payLoadModel.UserPayload;
-import Knightly.ProductService.util.ConversionGetter;
-import Knightly.ProductService.util.PriceGetter;
+import Knightly.ProductService.microservices.ConversionGetter;
+import Knightly.ProductService.microservices.PriceGetter;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
@@ -77,7 +77,7 @@ public class RequestBuilder {
                 .getPriceFromMicroService(product);
 
         BigDecimal convertedSum = this.conversionGetter
-                .getConversionFromMicroService(currency, priceSum.intValue());
+                .getConversionFromMicroService(priceSum.intValue(),currency);
 
         List<ComponentPayload> componentPayloads = createPayloadsFromComponents(
                 product.getComponents(), currency);
@@ -106,7 +106,7 @@ public class RequestBuilder {
 
     private ComponentPayload createComponentPayload(Component component, Currency currency) {
         BigDecimal convertedPrice = this.conversionGetter
-                .getConversionFromMicroService(currency, component.getPrice());
+                .getConversionFromMicroService(component.getPrice(), currency);
 
         return new ComponentPayload(
                 component.getId(),
