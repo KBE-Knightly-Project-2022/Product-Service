@@ -1,6 +1,6 @@
 package Knightly.ProductService.util;
 
-import Knightly.ProductService.model.Component;
+import Knightly.ProductService.repository.jpa.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

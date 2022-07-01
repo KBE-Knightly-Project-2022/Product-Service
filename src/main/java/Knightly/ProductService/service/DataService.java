@@ -1,18 +1,15 @@
 package Knightly.ProductService.service;
 
-import Knightly.ProductService.model.Component;
-import Knightly.ProductService.model.Product;
-import Knightly.ProductService.model.User;
+import Knightly.ProductService.repository.jpa.Component;
+import Knightly.ProductService.repository.jpa.Product;
+import Knightly.ProductService.repository.jpa.User;
 import Knightly.ProductService.repository.ComponentRepository;
 import Knightly.ProductService.repository.ProductRepository;
 import Knightly.ProductService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 

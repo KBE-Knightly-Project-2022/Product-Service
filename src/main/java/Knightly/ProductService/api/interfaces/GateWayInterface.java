@@ -1,6 +1,6 @@
-package Knightly.ProductService.interfaces;
+package Knightly.ProductService.api.interfaces;
 
-import Knightly.ProductService.model.Product;
+import Knightly.ProductService.repository.jpa.Product;
 
 public interface GateWayInterface {
     void getComponents();

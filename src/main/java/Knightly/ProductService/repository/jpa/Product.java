@@ -1,12 +1,12 @@
-package Knightly.ProductService.model;
+package Knightly.ProductService.repository.jpa;
 
+import Knightly.ProductService.repository.jpa.Component;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 

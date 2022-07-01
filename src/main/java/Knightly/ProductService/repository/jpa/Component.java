@@ -1,4 +1,4 @@
-package Knightly.ProductService.model;
+package Knightly.ProductService.repository.jpa;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;

@@ -1,31 +1,32 @@
-package Knightly.ProductService.dto;
+package Knightly.ProductService.repository.jpa;
 
-
+import Knightly.ProductService.repository.jpa.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
+@Transactional
 @Getter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO implements Serializable {
+public class User implements Serializable {
 
     @Id
-    @Column
+    @Column(unique = true)
     private long id;
 
     @Column
     @ManyToMany
     @JoinTable
-    private List<ProductDTO> products;
+    private List<Product> products;
 
-    @Column
-    public void setProducts(List<ProductDTO> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

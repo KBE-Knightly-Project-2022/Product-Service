@@ -1,17 +1,16 @@
 package Knightly.ProductService.service;
 
 import Knightly.ProductService.enums.Currency;
-import Knightly.ProductService.model.Component;
-import Knightly.ProductService.model.Product;
-import Knightly.ProductService.model.User;
-import Knightly.ProductService.dto.ComponentDTO;
-import Knightly.ProductService.dto.ProductDTO;
-import Knightly.ProductService.dto.UserDTO;
+import Knightly.ProductService.repository.jpa.Component;
+import Knightly.ProductService.repository.jpa.Product;
+import Knightly.ProductService.repository.jpa.User;
+import Knightly.ProductService.api.dto.ComponentDTO;
+import Knightly.ProductService.api.dto.ProductDTO;
+import Knightly.ProductService.api.dto.UserDTO;
 import Knightly.ProductService.microservices.CurrencyConversionGetter;
 import Knightly.ProductService.microservices.PriceGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
