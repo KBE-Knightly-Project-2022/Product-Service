@@ -16,7 +16,7 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
-@EnableCaching
+
 @Service
 public class DataService {
 
@@ -29,17 +29,14 @@ public class DataService {
     @Autowired
     private UserRepository userRepository;
 
-    @Cacheable(value = "Component")
     public List<Component> getComponents() {
         return this.componentRepository.findAll();
     }
 
-    @Cacheable(value = "Product")
     public List<Product> getProducts() {
         return this.productRepository.findAll();
     }
 
-    @Cacheable(value = "User", key = "#userID")
     public User getUser(long userID) {
         return this.userRepository.findById(userID);
     }

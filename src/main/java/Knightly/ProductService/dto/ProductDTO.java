@@ -1,33 +1,35 @@
-package Knightly.ProductService.model;
+package Knightly.ProductService.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
-
+@Entity
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @Accessors(chain = true)
 @NoArgsConstructor
-public class Product implements Serializable {
+public class ProductDTO implements Serializable {
 
     @Id
-    @Column(nullable = false, unique = true)
     private long id;
 
     @Column
     private String name;
 
     @Column
+    private BigDecimal price;
+
     @ManyToMany
     @JoinTable
-    private List<Component> components;
+    @Column
+    private List<ComponentDTO> components;
 }
