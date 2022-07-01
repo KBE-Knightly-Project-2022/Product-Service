@@ -11,13 +11,14 @@ import Knightly.ProductService.microservices.CurrencyConversionGetter;
 import Knightly.ProductService.microservices.PriceGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@EnableCaching
+@EnableCaching
 @Service
 public class DTOService {
 
@@ -29,23 +30,23 @@ public class DTOService {
     CurrencyConversionGetter currencyConversionGetter;
 
     @Cacheable("componentDTOs")
-    public List<ComponentDTO> getComponentDTOs(Currency currency) {
-        return createComponentDTOs(
+    public List<ComponentDTO> getAllComponentDTOs(Currency currency) {
+        return createComponentDTOList(
                 this.dataService.getComponents(),
                 currency
         );
     }
 
     @Cacheable("productDTOs")
-    public List<ProductDTO> getProductDTOs(Currency currency) {
-        return createProductDTOs(
+    public List<ProductDTO> getAllProductDTOs(Currency currency) {
+        return createProductDTOList(
                 this.dataService.getProducts(),
                 currency
         );
     }
 
     @Cacheable("userDTOs")
-    public UserDTO getUserDTOs(long userID, Currency currency) {
+    public UserDTO getUserDTO(long userID, Currency currency) {
         return createUserDTO(
                 this.dataService.getUser(userID),
                 currency);
@@ -64,7 +65,7 @@ public class DTOService {
     }
 
     private UserDTO createUserDTO(User user, Currency currency) {
-        List<ProductDTO> productDTOS = createProductDTOs(
+        List<ProductDTO> productDTOS = createProductDTOList(
                 user.getProducts(),
                 currency
         );
@@ -76,31 +77,31 @@ public class DTOService {
     }
 
     private ProductDTO createProductDTO(Product product, Currency currency) {
-        BigDecimal priceSum = this.priceGetter
+        BigDecimal productPrice = this.priceGetter
                 .getPriceFromMicroService(product);
 
-        BigDecimal convertedSum = this.currencyConversionGetter
-                .getConversionFromMicroService(priceSum.intValue(),currency);
+        BigDecimal convertedPrice = this.currencyConversionGetter
+                .getConversionFromMicroService(productPrice.intValue(),currency);
 
-        List<ComponentDTO> componentDTOS = createComponentDTOs(
+        List<ComponentDTO> componentDTOS = createComponentDTOList(
                 product.getComponents(), currency);
 
         return new ProductDTO(
                 product.getId(),
                 product.getName(),
-                convertedSum,
+                convertedPrice,
                 componentDTOS
                 );
     }
 
-    private List<ProductDTO> createProductDTOs(List<Product> products, Currency currency) {
+    private List<ProductDTO> createProductDTOList(List<Product> products, Currency currency) {
         return products
                 .stream()
                 .map(product -> createProductDTO(product, currency))
                 .collect(Collectors.toList());
     }
 
-    private List<ComponentDTO> createComponentDTOs(List<Component> components , Currency currency) {
+    private List<ComponentDTO> createComponentDTOList(List<Component> components , Currency currency) {
         return components
                 .stream()
                 .map(component -> createComponentDTO(component, currency))

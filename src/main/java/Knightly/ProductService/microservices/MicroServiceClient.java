@@ -1,6 +1,9 @@
 package Knightly.ProductService.microservices;
 
+import Knightly.ProductService.util.WarehouseComponentsGetter;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -14,6 +17,7 @@ public class MicroServiceClient {
 
     private final String ENTERED_AMOUNT = "enteredAmount";
     private final String REQUESTED_CURRENCY = "requestedCurrency";
+    private static final Logger logger = LoggerFactory.getLogger(WarehouseComponentsGetter.class);
     @Value("${routing.key.currency.service}")
     private String routingKeyCurrencyService;
 
@@ -34,7 +38,7 @@ public class MicroServiceClient {
             response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyCurrencyService, payload).toString();
             return new BigDecimal(response);
         } catch (AmqpException e) {
-            e.printStackTrace();
+            logger.error("Error while making request to microservice in classt: " + this.getClass().toString());
             return new BigDecimal("0.00");
         }
 
@@ -47,7 +51,7 @@ public class MicroServiceClient {
             response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyPriceService, prices).toString();
             return new BigDecimal(response);
         } catch (AmqpException e) {
-            e.printStackTrace();
+            logger.error("Error while making request to microservice in classt: " + this.getClass().toString());
             return new BigDecimal("0.00");
         }
     }
@@ -59,7 +63,7 @@ public class MicroServiceClient {
             payload.put(ENTERED_AMOUNT, enteredAmount);
             payload.put(REQUESTED_CURRENCY, requestedCurrency);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error creating Json to send to Microservice in class: " + this.getClass().toString());
         }
         return payload;
     }
