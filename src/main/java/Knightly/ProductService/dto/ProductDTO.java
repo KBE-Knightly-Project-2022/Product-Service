@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @NoArgsConstructor
-public class ProductDTO {
+public class ProductDTO implements Serializable {
 
     @Id
     private long id;

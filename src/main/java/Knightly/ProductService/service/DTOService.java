@@ -29,7 +29,7 @@ public class DTOService {
     @Autowired
     CurrencyConversionGetter currencyConversionGetter;
 
-//    @Cacheable("componentDTOs")
+    @Cacheable("componentDTOs")
     public List<ComponentDTO> getComponentDTOs(Currency currency) {
         return createComponentDTOs(
                 this.dataService.getComponents(),
@@ -37,7 +37,7 @@ public class DTOService {
         );
     }
 
-//    @Cacheable("productDTOs")
+    @Cacheable("productDTOs")
     public List<ProductDTO> getProductDTOs(Currency currency) {
         return createProductDTOs(
                 this.dataService.getProducts(),
@@ -45,7 +45,7 @@ public class DTOService {
         );
     }
 
-//    @Cacheable("userDTOs")
+    @Cacheable("userDTOs")
     public UserDTO getUserDTOs(long userID, Currency currency) {
         return createUserDTO(
                 this.dataService.getUser(userID),

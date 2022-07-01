@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
-@EnableCaching
+
 @Service
 public class DataService {
 
@@ -28,17 +28,14 @@ public class DataService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Cacheable("components")
     public List<Component> getComponents() {
         return this.componentRepository.findAll();
     }
 
-//    @Cacheable("products")
     public List<Product> getProducts() {
         return this.productRepository.findAll();
     }
 
-//    @Cacheable(value = "User", key = "#userID")
     public User getUser(long userID) {
         return this.userRepository.findById(userID);
     }

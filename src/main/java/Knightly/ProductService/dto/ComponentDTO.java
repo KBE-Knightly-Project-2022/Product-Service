@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ComponentDTO {
+public class ComponentDTO implements Serializable {
 
     @Id
     private long id;

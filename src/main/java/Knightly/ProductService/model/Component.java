@@ -9,15 +9,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.transaction.Transactional;
+import java.io.Serializable;
 
-@Transactional
+
 @Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @JsonPropertyOrder({"id","name","price","description","attack","defence","position","weight","minrange","maxrange"})
-public class Component {
+public class Component implements Serializable {
 
     @Id
     @Column(unique = true)
