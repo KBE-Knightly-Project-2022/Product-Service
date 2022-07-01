@@ -3,9 +3,9 @@ package Knightly.ProductService.service;
 import Knightly.ProductService.model.Component;
 import Knightly.ProductService.model.Product;
 import Knightly.ProductService.model.User;
-import Knightly.ProductService.payLoadModel.ComponentPayload;
-import Knightly.ProductService.payLoadModel.ProductPayload;
-import Knightly.ProductService.payLoadModel.UserPayload;
+import Knightly.ProductService.payLoadModel.ComponentDTO;
+import Knightly.ProductService.payLoadModel.ProductDTO;
+import Knightly.ProductService.payLoadModel.UserDTO;
 import Knightly.ProductService.microservices.ConversionGetter;
 import Knightly.ProductService.microservices.PriceGetter;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,7 +26,7 @@ public class RequestBuilder {
     private final PriceGetter priceGetter = new PriceGetter();
 
     @Cacheable("componentsPayload")
-    public List<ComponentPayload> getComponentsAsPayload(Currency currency) {
+    public List<ComponentDTO> getComponentsAsPayload(Currency currency) {
         return createPayloadsFromComponents(
                 this.dataService.getComponents(),
                 currency
@@ -34,7 +34,7 @@ public class RequestBuilder {
     }
 
     @Cacheable("producsPayload")
-    public List<ProductPayload> getProductsAsPayload(Currency currency) {
+    public List<ProductDTO> getProductsAsPayload(Currency currency) {
         return createPayloadsFromProducts(
                 this.dataService.getProducts(),
                 currency
@@ -42,7 +42,7 @@ public class RequestBuilder {
     }
 
     @Cacheable("userPayload")
-    public UserPayload getUserAsPayload(long userID, Currency currency) {
+    public UserDTO getUserAsPayload(long userID, Currency currency) {
         return createPayloadFromUser(
                 this.dataService.getUser(userID),
                 currency);
@@ -60,55 +60,55 @@ public class RequestBuilder {
         this.dataService.updateShoppingCart(userID, newShoppingCart);
     }
 
-    private UserPayload createPayloadFromUser(User user, Currency currency) {
-        List<ProductPayload> productPayloads = createPayloadsFromProducts(
+    private UserDTO createPayloadFromUser(User user, Currency currency) {
+        List<ProductDTO> productDTOS = createPayloadsFromProducts(
                 user.getProducts(),
                 currency
         );
 
-        return new UserPayload(
+        return new UserDTO(
                 user.getId(),
-                productPayloads
+                productDTOS
         );
     }
 
-    private ProductPayload createProductPayload(Product product, Currency currency) {
+    private ProductDTO createProductPayload(Product product, Currency currency) {
         BigDecimal priceSum = this.priceGetter
                 .getPriceFromMicroService(product);
 
         BigDecimal convertedSum = this.conversionGetter
                 .getConversionFromMicroService(priceSum.intValue(),currency);
 
-        List<ComponentPayload> componentPayloads = createPayloadsFromComponents(
+        List<ComponentDTO> componentDTOS = createPayloadsFromComponents(
                 product.getComponents(), currency);
 
-        return new ProductPayload(
+        return new ProductDTO(
                 product.getId(),
                 product.getName(),
                 convertedSum,
-                componentPayloads
+                componentDTOS
                 );
     }
 
-    private List<ProductPayload> createPayloadsFromProducts(List<Product> products, Currency currency) {
+    private List<ProductDTO> createPayloadsFromProducts(List<Product> products, Currency currency) {
         return products
                 .stream()
                 .map(product -> createProductPayload(product, currency))
                 .collect(Collectors.toList());
     }
 
-    private List<ComponentPayload> createPayloadsFromComponents(List<Component> components , Currency currency) {
+    private List<ComponentDTO> createPayloadsFromComponents(List<Component> components , Currency currency) {
         return components
                 .stream()
                 .map(component -> createComponentPayload(component, currency))
                 .collect(Collectors.toList());
     }
 
-    private ComponentPayload createComponentPayload(Component component, Currency currency) {
+    private ComponentDTO createComponentPayload(Component component, Currency currency) {
         BigDecimal convertedPrice = this.conversionGetter
                 .getConversionFromMicroService(component.getPrice(), currency);
 
-        return new ComponentPayload(
+        return new ComponentDTO(
                 component.getId(),
                 component.getName(),
                 convertedPrice,

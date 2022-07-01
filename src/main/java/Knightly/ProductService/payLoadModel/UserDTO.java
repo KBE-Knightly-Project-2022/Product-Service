@@ -11,14 +11,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPayload {
+public class UserDTO {
 
     @Id
     private long id;
 
-    private List<ProductPayload> products;
+    private List<ProductDTO> products;
 
-    public void setProducts(List<ProductPayload> products) {
+    public void setProducts(List<ProductDTO> products) {
         this.products = products;
     }
 }

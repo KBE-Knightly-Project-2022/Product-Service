@@ -9,6 +9,7 @@ import Knightly.ProductService.dto.ProductDTO;
 import Knightly.ProductService.dto.UserDTO;
 import Knightly.ProductService.microservices.CurrencyConversionGetter;
 import Knightly.ProductService.microservices.PriceGetter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class DTOService {
 
-    private final DataService dataService = new DataService();
+    @Autowired
+    DataService dataService;
     private final CurrencyConversionGetter currencyConversionGetter = new CurrencyConversionGetter();
     private final PriceGetter priceGetter = new PriceGetter();
 

@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @NoArgsConstructor
-public class ProductPayload {
+public class ProductDTO {
 
     @Id
     private long id;
@@ -25,5 +25,5 @@ public class ProductPayload {
 
     private BigDecimal price;
 
-    private List<ComponentPayload> components;
+    private List<ComponentDTO> components;
 }

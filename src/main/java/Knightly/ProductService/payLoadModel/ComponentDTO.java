@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ComponentPayload {
+public class ComponentDTO {
 
     @Id
     private long id;
