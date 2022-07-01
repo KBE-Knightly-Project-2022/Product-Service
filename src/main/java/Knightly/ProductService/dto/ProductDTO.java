@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,9 +21,14 @@ public class ProductDTO {
     @Id
     private long id;
 
+    @Column
     private String name;
 
+    @Column
     private BigDecimal price;
 
+    @ManyToMany
+    @JoinTable
+    @Column
     private List<ComponentDTO> components;
 }

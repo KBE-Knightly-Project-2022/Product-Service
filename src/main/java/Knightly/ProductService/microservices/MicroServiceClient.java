@@ -1,7 +1,6 @@
 package Knightly.ProductService.microservices;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -59,7 +58,7 @@ public class MicroServiceClient {
             payload = new JSONObject();
             payload.put(ENTERED_AMOUNT, enteredAmount);
             payload.put(REQUESTED_CURRENCY, requestedCurrency);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return payload;

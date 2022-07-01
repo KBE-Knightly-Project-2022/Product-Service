@@ -18,16 +18,18 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@EnableCaching
+//@EnableCaching
 @Service
 public class DTOService {
 
     @Autowired
     DataService dataService;
-    private final CurrencyConversionGetter currencyConversionGetter = new CurrencyConversionGetter();
-    private final PriceGetter priceGetter = new PriceGetter();
+    @Autowired
+    PriceGetter priceGetter;
+    @Autowired
+    CurrencyConversionGetter currencyConversionGetter;
 
-    @Cacheable("componentDTOs")
+//    @Cacheable("componentDTOs")
     public List<ComponentDTO> getComponentDTOs(Currency currency) {
         return createComponentDTOs(
                 this.dataService.getComponents(),
@@ -35,7 +37,7 @@ public class DTOService {
         );
     }
 
-    @Cacheable("productDTOs")
+//    @Cacheable("productDTOs")
     public List<ProductDTO> getProductDTOs(Currency currency) {
         return createProductDTOs(
                 this.dataService.getProducts(),
@@ -43,7 +45,7 @@ public class DTOService {
         );
     }
 
-    @Cacheable("userDTOs")
+//    @Cacheable("userDTOs")
     public UserDTO getUserDTOs(long userID, Currency currency) {
         return createUserDTO(
                 this.dataService.getUser(userID),

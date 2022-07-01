@@ -6,8 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 @Getter
 @Setter
 @Entity
