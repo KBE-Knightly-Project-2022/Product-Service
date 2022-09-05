@@ -24,20 +24,16 @@ public class DataBaseInitializer {
     private final String WAREHOUSE_COMPONENTS_URL = "http://localhost:6868/components";
     private final WarehouseComponentsGetter warehouseComponentsGetter = new WarehouseComponentsGetter();
     private final WarehouseProductsGetter warehouseProductsGetter = new WarehouseProductsGetter();
-    private static final Logger logger = LoggerFactory.getLogger(DataBaseInitializer.class);
 
     @Bean
     CommandLineRunner initializeDatabase(ComponentRepository componentRepository, ProductRepository productRepository) {
         return args -> {
-            try {
-                List<Component> components = warehouseComponentsGetter.getComponentsFromWarehouse(WAREHOUSE_COMPONENTS_URL);
-                componentRepository.saveAll(components);
+            List<Component> components = warehouseComponentsGetter.getComponentsFromWarehouse(WAREHOUSE_COMPONENTS_URL);
+            componentRepository.saveAll(components);
 
-                List<Product> products = warehouseProductsGetter.getProductsFromWarehouse(WAREHOUSE_PRODUCTS_URL);
-                productRepository.saveAll(products);
-            } catch (Exception e) {
-               logger.error("Data has already been fetched");
-            }
+            List<Product> products = warehouseProductsGetter.getProductsFromWarehouse(WAREHOUSE_PRODUCTS_URL);
+            productRepository.saveAll(products);
+
         };
     }
 }
