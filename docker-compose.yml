@@ -36,6 +36,8 @@ services:
         "spring.jpa.show-sql" : "true",
         "server.port" : "8095",
 
+        "spring.rabbitmq.host":"rabbitmq",
+        "spring.rabbitmq.port":"5672",
         "xchange.name" : "knightly.rpc",
         "currency.queue.name" : "currency.rpc.queue",
         "price.queue.name" : "price.rpc.queue",
