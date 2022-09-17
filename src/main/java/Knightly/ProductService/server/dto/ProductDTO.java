@@ -1,4 +1,4 @@
-package Knightly.ProductService.api.dto;
+package Knightly.ProductService.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

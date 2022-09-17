@@ -1,4 +1,4 @@
-package Knightly.ProductService.api.interfaces;
+package Knightly.ProductService.server.interfaces;
 
 import Knightly.ProductService.repository.jpa.Product;
 
