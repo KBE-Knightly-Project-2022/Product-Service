@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 
 

@@ -68,7 +68,7 @@ public class DTOService {
         this.dataService.createProduct(product);
     }
 
-    public void createProductFromIDs(List<long> ids, String name){
+    public void createProductFromIDs(List<Long> ids, String name){
         List<Component> components = getComponentsFromIDList(ids);
         long productID = UUID.randomUUID().getMostSignificantBits();
         this.dataService.createProduct(new Product(productID, name, components));
@@ -144,7 +144,7 @@ public class DTOService {
         );
     }
 
-    private List<Component> getComponentsFromIDList(List<long> ids) {
+    private List<Component> getComponentsFromIDList(List<Long> ids) {
         return ids.stream()
                 .map(id -> dataService.getComponentByID(id))
                 .collect(Collectors.toList());
