@@ -38,6 +38,10 @@ public class DataService {
         return this.userRepository.findById(userID);
     }
 
+    public Component getComponentByID(Long id) {
+        return this.componentRepository.getById(id);
+    }
+
     public void createProduct(Product product) {
         this.productRepository.save(product);
     }

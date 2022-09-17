@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @EnableCaching
@@ -64,6 +66,12 @@ public class DTOService {
 
     public void createProduct(Product product) {
         this.dataService.createProduct(product);
+    }
+
+    public void createProductFromIDs(List<long> ids, String name){
+        List<Component> components = getComponentsFromIDList(ids);
+        long productID = UUID.randomUUID().getMostSignificantBits();
+        this.dataService.createProduct(new Product(productID, name, components));
     }
 
     public void emptyShoppingCart(long userID) {
@@ -134,6 +142,12 @@ public class DTOService {
                 component.getMinrange(),
                 component.getWeight()
         );
+    }
+
+    private List<Component> getComponentsFromIDList(List<long> ids) {
+        return ids.stream()
+                .map(id -> dataService.getComponentByID(id))
+                .collect(Collectors.toList());
     }
 
 }
