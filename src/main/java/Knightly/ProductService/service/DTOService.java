@@ -37,12 +37,22 @@ public class DTOService {
         );
     }
 
+    @Cacheable("componentDTOsStandard")
+    public List<ComponentDTO> getAllComponentDTOs() {
+        return getAllComponentDTOs(Currency.bronze);
+    }
+
     @Cacheable("productDTOs")
     public List<ProductDTO> getAllProductDTOs(Currency currency) {
         return createProductDTOList(
                 this.dataService.getProducts(),
                 currency
         );
+    }
+
+    @Cacheable("productDTOs")
+    public List<ProductDTO> getAllProductDTOs() {
+        return getAllProductDTOs(Currency.bronze);
     }
 
     @Cacheable("userDTOs")

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class WarehouseProductsGetter {
     private final ObjectMapper mapper = new ObjectMapper();
     private static final Logger logger = LoggerFactory.getLogger(WarehouseProductsGetter.class);
 
-    public List<Product> getProductsFromWarehouse(String wareHouseProductsURL){
+    public List<Product> getProductsFromWarehouse(String wareHouseProductsURL) throws RestClientException {
         HttpHeaders header = new HttpHeaders();
         header.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>("parameter", header);
