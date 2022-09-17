@@ -38,20 +38,20 @@ public class MicroServiceClient {
             response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyCurrencyService, payload).toString();
             return new BigDecimal(response);
         } catch (AmqpException e) {
-            logger.error("Error while making request to microservice in classt: " + this.getClass().toString());
+            logger.error("Error while making request to microservice in class: " + this.getClass().toString());
             return new BigDecimal("0.00");
         }
 
     }
 
-    public BigDecimal sendToPriceServince(List<Integer> prices){
+    public BigDecimal sendToPriceService(List<Integer> prices){
 
         String response;
         try {
             response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyPriceService, prices).toString();
             return new BigDecimal(response);
         } catch (AmqpException e) {
-            logger.error("Error while making request to microservice in classt: " + this.getClass().toString());
+            logger.error("Error while making request to microservice in class: " + this.getClass().toString());
             return new BigDecimal("0.00");
         }
     }

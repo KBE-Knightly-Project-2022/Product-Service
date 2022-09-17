@@ -16,7 +16,7 @@ public class PriceGetter {
     MicroServiceClient microServiceClient;
 
     public BigDecimal getPriceFromMicroService (Product product) {
-        return microServiceClient.sendToPriceServince(getPricesFromProduct(product));
+        return microServiceClient.sendToPriceService(getPricesFromProduct(product));
     }
 
     private List<Integer> getPricesFromProduct(Product product) {
