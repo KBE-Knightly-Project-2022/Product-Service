@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    container_name: ProductServiceDB
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - services
+  app:
+    depends_on:
+      - mysqldb
+    build: ./.
+    restart: on-failure
+    container_name: ProductServiceApp
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+       " spring.datasource.url" : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?autoReconnect=true&useSSL=false",
+        "spring.datasource.username" : "$MYSQLDB_USER",
+       " spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+        
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5Dialect",
+        "spring.jpa.properties.hibernate.enable_lazy_load_no_trans" : "true",
+        "spring.jpa.hibernate.ddl-auto" : "update",
+        "spring.jpa.show-sql" : "true",
+        "server.port" : "8095",
+
+        "xchange.name" : "knightly.rpc",
+        "currency.queue.name" : "currency.rpc.queue",
+        "price.queue.name" : "price.rpc.queue",
+        "routing.key.currency.service" : "knightly.currency",
+        "routing.key.price.service" : "knightly.price",
+        
+        "spring.redis.host":"redis",
+        "spring.redis.port":"6379"
+      }'
+    volumes:
+      - .m2:/root/.m2
+    networks:
+      - services
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
+
+networks:
+  services:
+    name: Knightly
+    external: true
