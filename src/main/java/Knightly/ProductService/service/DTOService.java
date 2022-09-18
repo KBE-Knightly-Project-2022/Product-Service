@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -58,7 +57,7 @@ public class DTOService {
     }
 
     @Cacheable("userDTOs")
-    public UserDTO getUserDTO(long userID, Currency currency) {
+    public UserDTO getUserDTO(Long userID, Currency currency) {
         return createUserDTO(
                 this.dataService.getUser(userID),
                 currency);
@@ -74,11 +73,11 @@ public class DTOService {
         this.dataService.createProduct(new Product(productID, name, components));
     }
 
-    public void emptyShoppingCart(long userID) {
+    public void emptyShoppingCart(Long userID) {
         this.dataService.emptyShoppingCart(userID);
     }
 
-    public void updateShoppingCart(long userID, List<Product> newShoppingCart) {
+    public void updateShoppingCart(Long userID, List<Product> newShoppingCart) {
         this.dataService.updateShoppingCart(userID, newShoppingCart);
     }
 
