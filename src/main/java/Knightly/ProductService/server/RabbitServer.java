@@ -3,6 +3,7 @@ package Knightly.ProductService.server;
 import Knightly.ProductService.enums.Currency;
 import Knightly.ProductService.enums.RequestType;
 import Knightly.ProductService.external.NameOracle;
+import Knightly.ProductService.repository.jpa.Product;
 import Knightly.ProductService.server.dto.ComponentDTO;
 import Knightly.ProductService.server.dto.ProductDTO;
 import Knightly.ProductService.server.dto.ProductRequest;
@@ -28,10 +29,17 @@ public class RabbitServer {
 
     private static final Logger logger = LoggerFactory.getLogger(RabbitServer.class);
 
-    @RabbitListener
+    @RabbitListener(queues = "${product.queue.name}")
     public String handleRequest(ProductRequest productRequest) {
-        RequestType requestType = productRequest.getRequestType();
-        Currency currency = productRequest.getCurrency();
+        RequestType requestType;
+        Currency currency;
+        try {
+            requestType = productRequest.getRequestType();
+            currency = productRequest.getCurrency();
+        } catch (IllegalStateException | NullPointerException e) {
+            logger.error("Error Reading ProductRequest in:" + this.getClass());
+            return "Error Reading ProductRequest";
+        }
 
         switch (requestType) {
             case getComponents -> {
