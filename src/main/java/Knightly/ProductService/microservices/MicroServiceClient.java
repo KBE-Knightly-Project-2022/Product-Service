@@ -2,6 +2,7 @@ package Knightly.ProductService.microservices;
 
 import Knightly.ProductService.enums.Currency;
 import Knightly.ProductService.microservices.dto.CurrencyRequest;
+import Knightly.ProductService.microservices.dto.PriceRequest;
 import Knightly.ProductService.util.WarehouseComponentsGetter;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -47,10 +48,11 @@ public class MicroServiceClient {
     }
 
     public BigDecimal sendToPriceService(List<Integer> prices){
+        PriceRequest priceRequest = new PriceRequest(prices);
 
         String response;
         try {
-            response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyPriceService, prices).toString();
+            response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyPriceService, priceRequest).toString();
             return new BigDecimal(response);
         } catch (AmqpException e) {
             logger.error("Error while making request to microservice in class: " + this.getClass().toString());
