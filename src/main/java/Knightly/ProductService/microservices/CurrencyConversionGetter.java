@@ -14,6 +14,6 @@ public class CurrencyConversionGetter {
     MicroServiceClient microServiceClient;
 
     public BigDecimal getConversionFromMicroService(int enteredAmount, Currency requestedCurrency) {
-        return microServiceClient.sendToCurrencyService(enteredAmount, requestedCurrency.toString());
+        return microServiceClient.sendToCurrencyService(enteredAmount, requestedCurrency);
     }
 }

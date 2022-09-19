@@ -1,5 +1,7 @@
 package Knightly.ProductService.microservices;
 
+import Knightly.ProductService.enums.Currency;
+import Knightly.ProductService.microservices.dto.CurrencyRequest;
 import Knightly.ProductService.util.WarehouseComponentsGetter;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -30,12 +32,12 @@ public class MicroServiceClient {
     @Autowired
     private DirectExchange directExchange;
 
-    public BigDecimal sendToCurrencyService(int enteredAmount , String requestedCurrency) {
-        JSONObject payload = buildPayload(enteredAmount,requestedCurrency);
+    public BigDecimal sendToCurrencyService(int enteredAmount , Currency requestedCurrency) {
+        CurrencyRequest currencyRequest = new CurrencyRequest(enteredAmount, requestedCurrency);
 
         String response;
         try {
-            response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyCurrencyService, payload).toString();
+            response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyCurrencyService, currencyRequest).toString();
             return new BigDecimal(response);
         } catch (AmqpException e) {
             logger.error("Error while making request to microservice in class: " + this.getClass().toString());
