@@ -3,6 +3,7 @@ package Knightly.ProductService.microservices;
 import Knightly.ProductService.enums.Currency;
 import Knightly.ProductService.microservices.dto.CurrencyReply;
 import Knightly.ProductService.microservices.dto.CurrencyRequest;
+import Knightly.ProductService.microservices.dto.PriceReply;
 import Knightly.ProductService.microservices.dto.PriceRequest;
 import Knightly.ProductService.util.WarehouseComponentsGetter;
 import com.google.gson.Gson;
@@ -20,8 +21,6 @@ import java.util.List;
 
 public class MicroServiceClient {
 
-    private final String ENTERED_AMOUNT = "enteredAmount";
-    private final String REQUESTED_CURRENCY = "requestedCurrency";
     private static final Logger logger = LoggerFactory.getLogger(WarehouseComponentsGetter.class);
     @Value("${routing.key.currency.service}")
     private String routingKeyCurrencyService;
@@ -45,9 +44,8 @@ public class MicroServiceClient {
                     ,routingKeyCurrencyService
                     ,convertCurrencyRequestToJson(currencyRequest))
                     .toString();
-            return new BigDecimal(reply);
-//            CurrencyReply currencyReply = convertJsonToCurrencyReply(reply);
-//            return currencyReply.g;
+            CurrencyReply currencyReply = convertJsonToCurrencyReply(reply);
+            return currencyReply.getCalculatedCurrency();
         } catch (AmqpException e) {
             logger.error("Error while making request to microservice in class: " + this.getClass().toString());
             return new BigDecimal("0.00");
@@ -58,14 +56,15 @@ public class MicroServiceClient {
     public BigDecimal sendToPriceService(List<Integer> prices){
         PriceRequest priceRequest = new PriceRequest(prices);
 
-        String reply;
+        String replyJson;
         try {
-            reply = rabbitTemplate.convertSendAndReceive(
+            replyJson = rabbitTemplate.convertSendAndReceive(
                     directExchange.getName()
                     ,routingKeyPriceService
                     ,convertPriceRequestToJson(priceRequest))
                     .toString();
-            return new BigDecimal(reply);
+            PriceReply priceReply = convertJsonToPriceReply(replyJson);
+            return priceReply.getCalculatedPrice();
         } catch (AmqpException e) {
             logger.error("Error while making request to microservice in class: " + this.getClass().toString());
             return new BigDecimal("0.00");
@@ -74,6 +73,10 @@ public class MicroServiceClient {
 
     public CurrencyReply convertJsonToCurrencyReply(String json) {
         return new Gson().fromJson(json, CurrencyReply.class);
+    }
+
+    public PriceReply convertJsonToPriceReply(String json) {
+        return new Gson().fromJson(json, PriceReply.class);
     }
 
     public String convertCurrencyRequestToJson(CurrencyRequest currencyRequest){
