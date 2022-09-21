@@ -1,9 +1,11 @@
 package Knightly.ProductService.microservices;
 
 import Knightly.ProductService.enums.Currency;
+import Knightly.ProductService.microservices.dto.CurrencyReply;
 import Knightly.ProductService.microservices.dto.CurrencyRequest;
 import Knightly.ProductService.microservices.dto.PriceRequest;
 import Knightly.ProductService.util.WarehouseComponentsGetter;
+import com.google.gson.Gson;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +38,16 @@ public class MicroServiceClient {
     public BigDecimal sendToCurrencyService(int enteredAmount , Currency requestedCurrency) {
         CurrencyRequest currencyRequest = new CurrencyRequest(enteredAmount, requestedCurrency);
 
-        String response;
+        String reply;
         try {
-            response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyCurrencyService, currencyRequest).toString();
-            return new BigDecimal(response);
+            reply = rabbitTemplate.convertSendAndReceive(
+                    directExchange.getName()
+                    ,routingKeyCurrencyService
+                    ,convertCurrencyRequestToJson(currencyRequest))
+                    .toString();
+            return new BigDecimal(reply);
+//            CurrencyReply currencyReply = convertJsonToCurrencyReply(reply);
+//            return currencyReply.g;
         } catch (AmqpException e) {
             logger.error("Error while making request to microservice in class: " + this.getClass().toString());
             return new BigDecimal("0.00");
@@ -50,25 +58,31 @@ public class MicroServiceClient {
     public BigDecimal sendToPriceService(List<Integer> prices){
         PriceRequest priceRequest = new PriceRequest(prices);
 
-        String response;
+        String reply;
         try {
-            response = rabbitTemplate.convertSendAndReceive(directExchange.getName(), routingKeyPriceService, priceRequest).toString();
-            return new BigDecimal(response);
+            reply = rabbitTemplate.convertSendAndReceive(
+                    directExchange.getName()
+                    ,routingKeyPriceService
+                    ,convertPriceRequestToJson(priceRequest))
+                    .toString();
+            return new BigDecimal(reply);
         } catch (AmqpException e) {
             logger.error("Error while making request to microservice in class: " + this.getClass().toString());
             return new BigDecimal("0.00");
         }
     }
 
-    private JSONObject buildPayload(int enteredAmount, String requestedCurrency) {
-        JSONObject payload = null;
-        try {
-            payload = new JSONObject();
-            payload.put(ENTERED_AMOUNT, enteredAmount);
-            payload.put(REQUESTED_CURRENCY, requestedCurrency);
-        } catch (Exception e) {
-            logger.error("Error creating Json to send to Microservice in class: " + this.getClass().toString());
-        }
-        return payload;
+    public CurrencyReply convertJsonToCurrencyReply(String json) {
+        return new Gson().fromJson(json, CurrencyReply.class);
     }
+
+    public String convertCurrencyRequestToJson(CurrencyRequest currencyRequest){
+        return new Gson().toJson(currencyRequest);
+    }
+
+    public String convertPriceRequestToJson(PriceRequest priceRequest){
+        return new Gson().toJson(priceRequest);
+    }
+
+
 }

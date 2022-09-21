@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CurrencyRequest {
 
-    public int enteredAmound;
+    public int enteredAmount;
     public Currency requestedCurrency;
 }
