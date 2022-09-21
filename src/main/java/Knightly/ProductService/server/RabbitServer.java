@@ -32,7 +32,8 @@ public class RabbitServer {
     private static final Logger logger = LoggerFactory.getLogger(RabbitServer.class);
 
     @RabbitListener(queues = "${product.queue.name}")
-    public String handleRequest(ProductRequest productRequest) {
+    public String handleRequest(String productRequestJson) {
+        ProductRequest productRequest = convertJsonToProductRequest(productRequestJson);
         RequestType requestType;
         Currency currency;
         try {
@@ -93,5 +94,9 @@ public class RabbitServer {
     private String logError(String errorMessage){
         logger.error(errorMessage);
         return errorMessage;
+    }
+
+    private ProductRequest convertJsonToProductRequest(String productRequestJson){
+        return new Gson().fromJson(productRequestJson, ProductRequest.class);
     }
 }
