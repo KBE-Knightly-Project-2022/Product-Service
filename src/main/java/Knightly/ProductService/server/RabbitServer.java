@@ -15,10 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
+@Service
 public class RabbitServer {
 
     @Autowired
@@ -37,8 +39,7 @@ public class RabbitServer {
             requestType = productRequest.getRequestType();
             currency = productRequest.getCurrency();
         } catch (IllegalStateException | NullPointerException e) {
-            logger.error("Error Reading ProductRequest in:" + this.getClass());
-            return "Error Reading ProductRequest";
+            return logError("Error Reading ProductRequest in:" + this.getClass());
         }
 
         switch (requestType) {
@@ -62,14 +63,19 @@ public class RabbitServer {
                                     productRequest.getProductName());
                     return "Product created Sucessfully";
                 } catch (Exception e){
-                    return "Error While creating Produkt Request";
+                    return logError("Error While creating Produkt Request");
                 }
+            }
+            case emptyShoppingCart -> {
+                this.dtoService
+                        .emptyShoppingCart(productRequest.getUserID());
+                return "Shopping care emptied successfully";
             }
             case getAge -> {
                 return nameOracle.getAge(productRequest.getOracleName());
             }
         }
-        return "Error While Handling Request";
+        return logError("Error While Handling Request");
     }
 
     private String userToDTOJsnon(UserDTO userDTO) {
@@ -82,5 +88,10 @@ public class RabbitServer {
 
     private String componentsToDTOJson(List<ComponentDTO> allComponentDTOs) {
         return new Gson().toJson(allComponentDTOs);
+    }
+
+    private String logError(String errorMessage){
+        logger.error(errorMessage);
+        return errorMessage;
     }
 }
