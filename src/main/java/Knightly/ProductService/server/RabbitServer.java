@@ -2,13 +2,12 @@ package Knightly.ProductService.server;
 
 import Knightly.ProductService.enums.Currency;
 import Knightly.ProductService.enums.RequestType;
-import Knightly.ProductService.external.NameOracle;
-import Knightly.ProductService.repository.jpa.Product;
+import Knightly.ProductService.external.impl.NameOracleImpl;
 import Knightly.ProductService.server.dto.ComponentDTO;
 import Knightly.ProductService.server.dto.ProductDTO;
 import Knightly.ProductService.server.dto.ProductRequest;
 import Knightly.ProductService.server.dto.UserDTO;
-import Knightly.ProductService.service.DTOService;
+import Knightly.ProductService.service.impl.DTOServiceImpl;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -24,10 +23,10 @@ import java.util.List;
 public class RabbitServer {
 
     @Autowired
-    DTOService dtoService;
+    DTOServiceImpl dtoService;
 
     @Autowired
-    NameOracle nameOracle;
+    NameOracleImpl nameOracle;
 
     private static final Logger logger = LoggerFactory.getLogger(RabbitServer.class);
 
