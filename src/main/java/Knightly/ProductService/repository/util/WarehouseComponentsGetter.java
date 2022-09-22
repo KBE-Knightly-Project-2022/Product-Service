@@ -1,4 +1,4 @@
-package Knightly.ProductService.util;
+package Knightly.ProductService.repository.util;
 
 import Knightly.ProductService.repository.jpa.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +10,6 @@ import org.springframework.http.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

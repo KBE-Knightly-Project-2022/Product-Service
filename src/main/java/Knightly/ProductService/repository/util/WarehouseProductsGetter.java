@@ -1,4 +1,4 @@
-package Knightly.ProductService.util;
+package Knightly.ProductService.repository.util;
 
 import Knightly.ProductService.repository.jpa.Product;
 import com.fasterxml.jackson.core.JsonProcessingException;

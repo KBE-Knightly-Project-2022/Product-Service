@@ -1,4 +1,4 @@
-package Knightly.ProductService.util;
+package Knightly.ProductService.repository.util;
 
 import Knightly.ProductService.enums.Currency;
 import Knightly.ProductService.repository.jpa.Component;
