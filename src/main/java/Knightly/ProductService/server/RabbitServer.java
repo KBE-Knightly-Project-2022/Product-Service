@@ -31,7 +31,7 @@ public class RabbitServer {
     private static final Logger logger = LoggerFactory.getLogger(RabbitServer.class);
 
     @RabbitListener(queues = "${product.queue.name}")
-    public String handleRequest(String productRequestJson) {
+    public String handleProductRequest(String productRequestJson) {
         ProductRequest productRequest = convertJsonToProductRequest(productRequestJson);
         RequestType requestType;
         Currency currency;
@@ -39,20 +39,20 @@ public class RabbitServer {
             requestType = productRequest.getRequestType();
             currency = productRequest.getCurrency();
         } catch (IllegalStateException | NullPointerException e) {
-            return logError("Error Reading ProductRequest in:" + this.getClass());
+            return logError("[Error]: Reading ProductRequest in:" + this.getClass());
         }
 
         switch (requestType) {
             case getComponents -> {
-                return componentsToDTOJson(this.dtoService
+                return convertComponentsDTOtoJson(this.dtoService
                                 .getAllComponentDTOs(currency));
             }
             case getProducts -> {
-                return productDTOtoJson(this.dtoService
+                return convertProductsDTOToJson(this.dtoService
                 .getAllProductDTOs(currency));
             }
             case getUser -> {
-                return userToDTOJsnon(this.dtoService
+                return convertUserDTOtoJson(this.dtoService
                         .getUserDTO(productRequest.getUserID()
                         , currency));
             }
@@ -63,30 +63,30 @@ public class RabbitServer {
                                     productRequest.getProductName());
                     return "Product created Sucessfully";
                 } catch (Exception e){
-                    return logError("Error While creating Produkt Request");
+                    return logError("[Error] While creating Produkt Request");
                 }
             }
             case emptyShoppingCart -> {
                 this.dtoService
                         .emptyShoppingCart(productRequest.getUserID());
-                return "Shopping care emptied successfully";
+                return "Shopping cart emptied successfully";
             }
             case getAge -> {
                 return nameOracle.getAge(productRequest.getOracleName());
             }
         }
-        return logError("Error While Handling Request");
+        return logError("[Error] While Handling Request");
     }
 
-    private String userToDTOJsnon(UserDTO userDTO) {
+    private String convertUserDTOtoJson(UserDTO userDTO) {
         return new Gson().toJson(userDTO);
     }
 
-    private String productDTOtoJson(List<ProductDTO> allProductDTOs) {
+    private String convertProductsDTOToJson(List<ProductDTO> allProductDTOs) {
         return new Gson().toJson(allProductDTOs);
     }
 
-    private String componentsToDTOJson(List<ComponentDTO> allComponentDTOs) {
+    private String convertComponentsDTOtoJson(List<ComponentDTO> allComponentDTOs) {
         return new Gson().toJson(allComponentDTOs);
     }
 
