@@ -9,6 +9,7 @@ import Knightly.ProductService.server.dto.ProductRequest;
 import Knightly.ProductService.server.dto.UserDTO;
 import Knightly.ProductService.service.impl.DTOServiceImpl;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +33,14 @@ public class RabbitServer {
 
     @RabbitListener(queues = "${product.queue.name}")
     public String handleProductRequest(String productRequestJson) {
-        ProductRequest productRequest = convertJsonToProductRequest(productRequestJson);
+        ProductRequest productRequest;
         RequestType requestType;
         Currency currency;
         try {
+            productRequest = convertJsonToProductRequest(productRequestJson);
             requestType = productRequest.getRequestType();
             currency = productRequest.getCurrency();
-        } catch (IllegalStateException | NullPointerException e) {
+        } catch (IllegalStateException | NullPointerException | JsonSyntaxException e) {
             return logError("[Error]: Reading ProductRequest in:" + this.getClass());
         }
 
