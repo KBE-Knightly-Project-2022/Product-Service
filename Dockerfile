@@ -1,6 +1,6 @@
 FROM maven:3.8.4-openjdk-17
 
-WORKDIR /spring_warehouse
+WORKDIR /Product-Service
 COPY . .
 RUN mvn clean install
 
