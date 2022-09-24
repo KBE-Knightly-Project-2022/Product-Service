@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -60,11 +61,16 @@ public class RabbitServer {
             }
             case createProduct -> {
                 try {
-                    this.dtoService
-                            .createProductFromIDs(productRequest.getComponentIDs(),
-                                    productRequest.getProductName());
-                    return "Product created Sucessfully";
-                } catch (Exception e){
+                    List<Long> componentIDs = productRequest.getComponentIDs();
+                    String productName = productRequest.getProductName();
+                    if(verifyComponentsIDs(componentIDs)) {
+                        this.dtoService
+                                .createProductFromIDs(componentIDs, productName);
+                        return "Product created Sucessfully";
+                    } else {
+                        return logError("[Error] ProductID not found");
+                    }
+                } catch (NullPointerException e){
                     return logError("[Error] While creating Produkt Request");
                 }
             }
@@ -99,5 +105,18 @@ public class RabbitServer {
 
     private ProductRequest convertJsonToProductRequest(String productRequestJson){
         return new Gson().fromJson(productRequestJson, ProductRequest.class);
+    }
+
+    private boolean verifyComponentsIDs(List<Long> componentIds){
+        if(componentIds == null) {
+            return false;
+        }
+
+        List<Long> availableIDs = dtoService.getAllComponentDTOs()
+                .stream()
+                .map(ComponentDTO::getId)
+                .collect(Collectors.toList());
+
+        return (availableIDs.containsAll(componentIds));
     }
 }

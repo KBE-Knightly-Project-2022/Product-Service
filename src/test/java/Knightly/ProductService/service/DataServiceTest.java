@@ -64,5 +64,4 @@ public class DataServiceTest {
 
         Mockito.verify(componentRepository, Mockito.times(1)).getById(1L);
     }
-
 }
