@@ -54,11 +54,6 @@ public class RabbitServer {
                 return convertProductsDTOToJson(this.dtoService
                 .getAllProductDTOs(currency));
             }
-            case getUser -> {
-                return convertUserDTOtoJson(this.dtoService
-                        .getUserDTO(productRequest.getUserID()
-                        , currency));
-            }
             case createProduct -> {
                 try {
                     List<Long> componentIDs = productRequest.getComponentIDs();
@@ -73,11 +68,6 @@ public class RabbitServer {
                 } catch (NullPointerException e){
                     return logError("[Error] While creating Produkt Request");
                 }
-            }
-            case emptyShoppingCart -> {
-                this.dtoService
-                        .emptyShoppingCart(productRequest.getUserID());
-                return "Shopping cart emptied successfully";
             }
             case getAge -> {
                 return nameOracle.getAge(productRequest.getOracleName());
