@@ -67,15 +67,6 @@ public class RabbitServerTest {
         Mockito.verify(dtoService, Mockito.times(1)).getAllProductDTOs(Currency.cow);
     }
 
-    @Test
-    public void handleGetUserProductRequest() {
-        ProductRequest productRequest = new ProductRequest(RequestType.getUser, 1L, Currency.bronze);
-        String productRequestJson = convertProductRequestTJson(productRequest);
-
-        rabbitServer.handleProductRequest(productRequestJson);
-
-        Mockito.verify(dtoService, Mockito.times(1)).getUserDTO(1L, Currency.bronze);
-    }
 
     @Test
     public void handleCreateProductRequest() {
@@ -105,15 +96,6 @@ public class RabbitServerTest {
         Mockito.verify(dtoService, Mockito.times(0)).createProductFromIDs(componentIDs, "floomp");
     }
 
-    @Test
-    public void handleEmptyShoppingCartRequest() {
-        ProductRequest productRequest = new ProductRequest(RequestType.emptyShoppingCart, 1L);
-        String productRequestJson = convertProductRequestTJson(productRequest);
-
-        rabbitServer.handleProductRequest(productRequestJson);
-
-        Mockito.verify(dtoService, Mockito.times(1)).emptyShoppingCart(1L);
-    }
 
     @Test
     public void handleFaultyProductRequest() {

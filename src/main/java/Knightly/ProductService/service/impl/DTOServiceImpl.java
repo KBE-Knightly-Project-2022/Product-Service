@@ -14,11 +14,14 @@ import Knightly.ProductService.service.impl.DataServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @EnableCaching
@@ -45,7 +48,7 @@ public class DTOServiceImpl implements DTOService {
         return getAllComponentDTOs(Currency.bronze);
     }
 
-    @Cacheable("productDTOs")
+
     public List<ProductDTO> getAllProductDTOs(Currency currency) {
         return createProductDTOList(
                 this.dataService.getProducts(),
@@ -53,7 +56,6 @@ public class DTOServiceImpl implements DTOService {
         );
     }
 
-    @Cacheable("productDTOs")
     public List<ProductDTO> getAllProductDTOs() {
         return getAllProductDTOs(Currency.bronze);
     }
