@@ -44,11 +44,7 @@ public class DataBaseInitializer {
             } catch (RestClientException e) {
                 logger.error("Error while trying to connect to Warehouse, please restart the application");
             }
-            //this is just for testing
-            List<ComponentDTO> componentDTOS = dtoService.getAllComponentDTOs(Currency.silver);
-            List<ProductDTO> productDTOS = dtoService.getAllProductDTOs(Currency.silver);
-            System.out.println(componentDTOS.get(0).getPrice());
-            System.out.println(productDTOS.get(0).getPrice());
+
         };
     }
 }
